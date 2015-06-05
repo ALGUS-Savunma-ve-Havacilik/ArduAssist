@@ -1,11 +1,6 @@
+
 #include "SoftwareServo.h"
 #include "HobbyRadioReceiver.h"
-
-
-// Specify the number of channels,
-//   followed by the pins the channels are attached to
-
-
 HobbyRadioReceiver rec( 6, A0, A1, A2, A3, A4, A5);
 
 SoftwareServo * servoArray;
@@ -18,6 +13,18 @@ unsigned long previousMillis    = 0;
 unsigned long previousMilli2    = 0;
 
 int val;
+
+// Specify the number of channels,
+//   followed by the pins the channels are attached to
+
+
+int noChange(HobbyRadioReceiver rec, int iChannel)
+{
+	int iNewValue = 0;
+	iNewValue = rec.check(iChannel);
+	return iNewValue;
+}
+
 
 void setup()
 {
@@ -62,6 +69,8 @@ void loop()
         Serial.print( "\t" );
       }
       Serial.println( "\n\n\n\n\n\n\n\n\n\n\n" );
+	  
+	  servoArray[i-1].write(noChange(rec,i));
     }
   }
 
@@ -75,3 +84,4 @@ void loop()
     }
   }
 }
+
