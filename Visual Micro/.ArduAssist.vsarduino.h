@@ -10,7 +10,6 @@
 
 #define __AVR_ATmega328p__
 #define __AVR_ATmega328P__
-#define _VMDEBUG 1
 #define ARDUINO 164
 #define ARDUINO_MAIN
 #define F_CPU 16000000L
@@ -21,10 +20,11 @@
 #define ARDUINO_ARCH_AVR
 extern "C" void __cxa_pure_virtual() {;}
 
-void dmpDataReady();
 //
 //
 
 #include "c:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs\pins_arduino.h" 
 #include "c:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
 #include <ArduAssist.ino>
+#include <SoftwareServo.cpp>
+#include <SoftwareServo.h>
