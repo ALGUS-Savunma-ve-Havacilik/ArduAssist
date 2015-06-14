@@ -1,6 +1,32 @@
 #include "Arduino.h"
 #include "ServoMod.h"
 
+servoMinMax::servoMinMax(void)
+{
+  _iMaxPos = 90;
+  _iMaxNeg = 90;
+}
+
+int servoMinMax::getMaxNeg()
+{
+  return _iMaxNeg;
+}
+
+int servoMinMax::getMaxPos()
+{
+  return _iMaxPos;
+}
+
+void servoMinMax::setMaxNeg(int iMax)
+{
+  _iMaxNeg = iMax;
+}
+
+void servoMinMax::setMaxPos(int iMax)
+{
+  _iMaxPos = iMax;
+}
+
 ServoMod::ServoMod(void)
 {
   _iOld = 90;
