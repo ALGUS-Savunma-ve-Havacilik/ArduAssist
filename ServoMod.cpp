@@ -27,6 +27,25 @@ void servoMinMax::setMaxPos(int iMax)
   _iMaxPos = iMax;
 }
 
+void servoMinMax::setMaxTravel(int iMax)
+{
+  _iMaxTravel = iMax;
+}
+
+int servoMinMax::getMaxTravel()
+{
+  return _iMaxTravel;
+}
+
+int servoMinMax::getProportional(int iInput)
+{
+  int iAbsTravel = _iMaxPos - _iMaxNeg;
+  int iAbsInput = iInput - _iMaxNeg;
+  double dPercent = (double)iAbsInput / (double)iAbsTravel;
+  int iCalculated = (int)((double)_iMaxTravel * dPercent);
+  return iCalculated;
+}
+
 ServoMod::ServoMod(void)
 {
   _iOld = 90;

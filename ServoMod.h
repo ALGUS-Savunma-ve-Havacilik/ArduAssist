@@ -11,14 +11,18 @@ class servoMinMax
 {
   public:
   servoMinMax(void);
+  int getProportional(int);
   int getMaxPos();
   int getMaxNeg();
+  int getMaxTravel();
+  void setMaxTravel(int);
   void setMaxPos(int);
   void setMaxNeg(int);
   
   private:
   int _iMaxPos;
   int _iMaxNeg;
+  int _iMaxTravel;
   
 };
 

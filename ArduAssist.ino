@@ -56,9 +56,12 @@ HobbyRadioReceiver * rec;
 
 int iNumServos = 6;
 int iThrottle = 2;
+int ledPin = 13; 
+bool ledOn = false;
 
 unsigned long previousMillis    = 0;
 unsigned long previousMilli2    = 0;
+unsigned long calibrationMillis = 0;
 
 ServoMod mod;
 
@@ -73,7 +76,7 @@ void setup()
   // Specify the number of channels,
   //   followed by the pins the channels are attached to
   rec = new HobbyRadioReceiver( 6, A0, A1, A2, A3, A4, A5);
-  pinMode(13,OUTPUT);
+  pinMode(ledPin,OUTPUT);
   for (int i =0; i< iNumServos; i++)
   {
     servoArray[i].attach(pins[i]);
@@ -97,10 +100,51 @@ void setup()
 void loop()
 {
   unsigned long currentMillis = millis();
+  
+  while (millis() < 10000) // first ten seconds for calibration.  Get max travel for all six raw channels coming from the transmitter
+  {
+    unsigned long curCalibrationMillis = millis();
+    if (curCalibrationMillis - calibrationMillis > 250)
+    {
+      if (ledOn)
+      {
+        digitalWrite(ledPin,LOW);
+        ledOn = false;
+      }
+      else
+      {
+        digitalWrite(ledPin,HIGH);
+        ledOn = true;
+      }
+    }
+    for (int i = 1; i <= rec->getNumChannels(); i++ )
+    {
+      int j = i-1; //bloody indexing of the servo library - index starts at 1, not 0
+      int curVal = rec->check(i);
+      if (curVal < mod.servos[j].getMaxNeg())
+      {
+        mod.servos[j].setMaxNeg(curVal);
+      }
+      if (curVal > mod.servos[j].getMaxPos())
+      {
+        mod.servos[j].setMaxPos(curVal);
+      }
+    }
+  }
 
   // here is where you'd put code that needs to be running all the time.
   if(currentMillis - previousMilli2 > 50)
   {
+    if (ledOn)
+    {
+      digitalWrite(ledPin,LOW);
+      ledOn = false;
+    }
+    else
+    {
+      digitalWrite(ledPin,HIGH);
+      ledOn = true;
+    }
     previousMilli2 = currentMillis;
     for (int i = 1; i <= rec->getNumChannels(); i++ )
     {
