@@ -82,8 +82,14 @@
       <Value>C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
       <Value>c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>c:/Program Files (x86)/Arduino/libraries</Value>
+      <Value>c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire/utility</Value>
+      <Value>c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo/utility</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/MPU6050/utility</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/MPU6050</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/I2Cdev/utility</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/I2Cdev</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver/utility</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver</Value>
       <Value>../../ArduAssist</Value>
@@ -120,8 +126,14 @@
       <Value>C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
       <Value>c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>c:/Program Files (x86)/Arduino/libraries</Value>
+      <Value>c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire/utility</Value>
+      <Value>c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo/utility</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/MPU6050/utility</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/MPU6050</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/I2Cdev/utility</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/I2Cdev</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver/utility</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver</Value>
       <Value>../../ArduAssist</Value>
@@ -137,7 +149,7 @@
   <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
 </AvrGccCpp>
     </ToolchainSettings>
-    <VMSETTING_IncludePaths>c:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;c:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;../../ArduAssist;c:/Program Files (x86)/Arduino/libraries;c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Users/richards/Documents/Arduino/libraries;c:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;c:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;c:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;C:/Users/richards/Documents/Arduino/libraries/arduinounit-2.1.1/src;C:/Users/richards/Documents/Arduino/libraries/arduinounit-2.1.1/src/utility;C:/Users/richards/Documents/Arduino/libraries/HobbyRadioReceiver;C:/Users/richards/Documents/Arduino/libraries/HobbyRadioReceiver/utility;C:/Users/richards/Documents/Arduino/libraries/MPU6050;C:/Users/richards/Documents/Arduino/libraries/MPU6050/utility;c:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/yun;C:/Users/richards/Documents/Arduino/libraries/I2Cdev;C:/Users/richards/Documents/Arduino/libraries/I2Cdev/utility;c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire;c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire/utility;C:/Users/richards/Documents/Arduino/libraries/SoftwareServo;C:/Users/richards/Documents/Arduino/libraries/SoftwareServo/utility;C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver;C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver/utility;C:/Users/Richard/Documents/Arduino/libraries;C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo;C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo/utility;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>c:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;c:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;../../ArduAssist;c:/Program Files (x86)/Arduino/libraries;c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Users/richards/Documents/Arduino/libraries;c:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;c:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;c:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;C:/Users/richards/Documents/Arduino/libraries/arduinounit-2.1.1/src;C:/Users/richards/Documents/Arduino/libraries/arduinounit-2.1.1/src/utility;C:/Users/richards/Documents/Arduino/libraries/HobbyRadioReceiver;C:/Users/richards/Documents/Arduino/libraries/HobbyRadioReceiver/utility;C:/Users/richards/Documents/Arduino/libraries/MPU6050;C:/Users/richards/Documents/Arduino/libraries/MPU6050/utility;c:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/yun;C:/Users/richards/Documents/Arduino/libraries/I2Cdev;C:/Users/richards/Documents/Arduino/libraries/I2Cdev/utility;c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire;c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire/utility;C:/Users/richards/Documents/Arduino/libraries/SoftwareServo;C:/Users/richards/Documents/Arduino/libraries/SoftwareServo/utility;C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver;C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver/utility;C:/Users/Richard/Documents/Arduino/libraries;C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo;C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo/utility;C:/Users/Richard/Documents/Arduino/libraries/MPU6050;C:/Users/Richard/Documents/Arduino/libraries/MPU6050/utility;C:/Users/Richard/Documents/Arduino/libraries/I2Cdev;C:/Users/Richard/Documents/Arduino/libraries/I2Cdev/utility;</VMSETTING_IncludePaths>
     <VisualMicroSettings>
       <VisualMicroSettings>
         <arduino.board.name>nano_atmega328</arduino.board.name>
@@ -343,8 +355,14 @@ vmresolved.tools.path=c:\Program Files (x86)\Arduino\hardware\tools\avr
       <Value>C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
       <Value>c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>c:/Program Files (x86)/Arduino/libraries</Value>
+      <Value>c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire/utility</Value>
+      <Value>c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo/utility</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/MPU6050/utility</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/MPU6050</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/I2Cdev/utility</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/I2Cdev</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver/utility</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver</Value>
       <Value>../../ArduAssist</Value>
@@ -381,8 +399,14 @@ vmresolved.tools.path=c:\Program Files (x86)\Arduino\hardware\tools\avr
       <Value>C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers</Value>
       <Value>c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries</Value>
       <Value>c:/Program Files (x86)/Arduino/libraries</Value>
+      <Value>c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire/utility</Value>
+      <Value>c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo/utility</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/MPU6050/utility</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/MPU6050</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/I2Cdev/utility</Value>
+      <Value>C:/Users/Richard/Documents/Arduino/libraries/I2Cdev</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver/utility</Value>
       <Value>C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver</Value>
       <Value>../../ArduAssist</Value>
@@ -398,7 +422,7 @@ vmresolved.tools.path=c:\Program Files (x86)\Arduino\hardware\tools\avr
   <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
 </AvrGccCpp>
     </ToolchainSettings>
-    <VMSETTING_IncludePaths>c:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;c:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;../../ArduAssist;c:/Program Files (x86)/Arduino/libraries;c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Users/richards/Documents/Arduino/libraries;c:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;c:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;c:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;C:/Users/richards/Documents/Arduino/libraries/arduinounit-2.1.1/src;C:/Users/richards/Documents/Arduino/libraries/arduinounit-2.1.1/src/utility;C:/Users/richards/Documents/Arduino/libraries/HobbyRadioReceiver;C:/Users/richards/Documents/Arduino/libraries/HobbyRadioReceiver/utility;C:/Users/richards/Documents/Arduino/libraries/MPU6050;C:/Users/richards/Documents/Arduino/libraries/MPU6050/utility;c:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/yun;C:/Users/richards/Documents/Arduino/libraries/I2Cdev;C:/Users/richards/Documents/Arduino/libraries/I2Cdev/utility;c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire;c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire/utility;C:/Users/richards/Documents/Arduino/libraries/SoftwareServo;C:/Users/richards/Documents/Arduino/libraries/SoftwareServo/utility;C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver;C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver/utility;C:/Users/Richard/Documents/Arduino/libraries;C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo;C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo/utility;</VMSETTING_IncludePaths>
+    <VMSETTING_IncludePaths>c:/Program Files (x86)/Arduino/hardware/arduino/avr/cores/arduino;c:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/eightanaloginputs;../../ArduAssist;c:/Program Files (x86)/Arduino/libraries;c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries;C:/Program Files (x86)/Visual Micro/Visual Micro for Arduino/Micro Platforms/default/debuggers;C:/Users/richards/Documents/Arduino/libraries;c:/Program Files (x86)/Arduino/hardware/tools/avr/avr/include/;c:/Program Files (x86)/Arduino/hardware/tools/avr//avr/include/avr/;c:/Program Files (x86)/Arduino/hardware/tools/avr/lib/gcc/avr/4.8.1/include;C:/Users/richards/Documents/Arduino/libraries/arduinounit-2.1.1/src;C:/Users/richards/Documents/Arduino/libraries/arduinounit-2.1.1/src/utility;C:/Users/richards/Documents/Arduino/libraries/HobbyRadioReceiver;C:/Users/richards/Documents/Arduino/libraries/HobbyRadioReceiver/utility;C:/Users/richards/Documents/Arduino/libraries/MPU6050;C:/Users/richards/Documents/Arduino/libraries/MPU6050/utility;c:/Program Files (x86)/Arduino/hardware/arduino/avr/variants/yun;C:/Users/richards/Documents/Arduino/libraries/I2Cdev;C:/Users/richards/Documents/Arduino/libraries/I2Cdev/utility;c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire;c:/Program Files (x86)/Arduino/hardware/arduino/avr/libraries/Wire/utility;C:/Users/richards/Documents/Arduino/libraries/SoftwareServo;C:/Users/richards/Documents/Arduino/libraries/SoftwareServo/utility;C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver;C:/Users/Richard/Documents/Arduino/libraries/HobbyRadioReceiver/utility;C:/Users/Richard/Documents/Arduino/libraries;C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo;C:/Users/Richard/Documents/Arduino/libraries/SoftwareServo/utility;C:/Users/Richard/Documents/Arduino/libraries/MPU6050;C:/Users/Richard/Documents/Arduino/libraries/MPU6050/utility;C:/Users/Richard/Documents/Arduino/libraries/I2Cdev;C:/Users/Richard/Documents/Arduino/libraries/I2Cdev/utility;</VMSETTING_IncludePaths>
     <VisualMicroSettings>
       <VisualMicroSettings>
         <arduino.board.name>nano_atmega328</arduino.board.name>
@@ -581,6 +605,9 @@ vmresolved.tools.path=c:\Program Files (x86)\Arduino\hardware\tools\avr
     <Folder Include="Visual Micro\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArduAssist.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="ServoMod.cpp">
       <SubType>compile</SubType>
     </Compile>

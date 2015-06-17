@@ -33,6 +33,7 @@
 #include "SoftwareServo.h"
 #include "HobbyRadioReceiver.h"
 #include "ServoMod.h"
+#include "ArduAssist.h"
 
 MPU6050 mpu;
 #define OUTPUT_READABLE_YAWPITCHROLL
@@ -58,31 +59,6 @@ volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin h
 void dmpDataReady() {
   mpuInterrupt = true;
 }
-
-enum output_pins // enum to get the pin number we are after from the pins[] array
-{
-  elevator,
-  rudder,
-  leftAileron,
-  rightAileron,
-  throttleOut
-};
-
-enum input_pins
-{
-  pitch = 1, //Because the HobbyRadioReceiver indexes from 1 for input pins, we start from 1
-  roll,
-  yaw,
-  throttleIn,
-  scale,
-  flapSpoil
-};
-
-enum max_inputs
-{
-  max_pos = 0,
-  max_neg
-};
 
 SoftwareServo * servoArray;
 int * pins;
@@ -250,21 +226,21 @@ void loop()
       }
       Serial.println( "\n\n\n\n\n\n\n\n\n\n\n" );
       
-      if (i == roll)
-      {
-        servoArray[leftAileron].write(mod.iLeftAileronSimple(val));
-        servoArray[rightAileron].write(mod.iRightAileronSimple(val));
-        
-        int iLeft;
-        int iRight;
-        mod.AileronComplex(val,&iLeft,&iRight,90);
-        servoArray[leftAileron].write(iLeft);
-        servoArray[rightAileron].write(iRight);
-      }
-      else
-      {
+//      if (i == roll)
+//      {
+//        servoArray[leftAileron].write(mod.iLeftAileronSimple(val));
+//        servoArray[rightAileron].write(mod.iRightAileronSimple(val));
+//        
+//        int iLeft;
+//        int iRight;
+//        mod.AileronComplex(val,&iLeft,&iRight,90);
+//        servoArray[leftAileron].write(iLeft);
+//        servoArray[rightAileron].write(iRight);
+//      }
+//      else
+//      {
         servoArray[i-1].write(mod.noChange(val));
-      }
+//      }
     }
   }
 

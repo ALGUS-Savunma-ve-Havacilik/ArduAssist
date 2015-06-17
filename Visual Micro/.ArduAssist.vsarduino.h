@@ -28,5 +28,6 @@ void dmpDataReady();
 #include "c:\Program Files (x86)\Arduino\hardware\arduino\avr\variants\eightanaloginputs\pins_arduino.h" 
 #include "c:\Program Files (x86)\Arduino\hardware\arduino\avr\cores\arduino\arduino.h"
 #include <ArduAssist.ino>
+#include <ArduAssist.h>
 #include <ServoMod.cpp>
 #include <ServoMod.h>

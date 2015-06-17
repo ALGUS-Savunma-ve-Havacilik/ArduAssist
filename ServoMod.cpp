@@ -56,11 +56,11 @@ int ServoMod::noChange(int iInput) // Take in the value for a channel and pass i
   return iInput;
 }
 
-int ServoMod::ch6Scaled(int iInput, int iCh6) //  Take in a value for a channel and scale it against channel 6.  100% = full data, 0% = no movement.
+int ServoMod::ch6Scaled(int iInput, int iChannel, int iCh6) //  Take in a value for a channel and scale it against channel 6.  100% = full data, 0% = no movement.
 {
   int iNewValue = 0;
-  int iCurValue = iInput;
-  int iServo6value = iCh6;
+  int iCurValue = this->servos[iChannel].getProportional(iInput);
+  int iServo6value = this->servos[scale].getProportional(iCh6);
   double dModPercent = (double)iServo6value / 180.0;
   iNewValue = (int)((double)iCurValue * dModPercent);
   return iNewValue;
@@ -68,17 +68,20 @@ int ServoMod::ch6Scaled(int iInput, int iCh6) //  Take in a value for a channel 
 
 int ServoMod::iLeftAileronSimple(int iInput)
 {
-  return iInput;
+  int iScaled = this->servos[roll].getProportional(iInput);
+  return iScaled;
 }
 
 int ServoMod::iRightAileronSimple(int iInput)
 {
-  return 180-iInput;
+  int iScaled = this->servos[roll].getProportional(iInput);
+  return 180-iScaled;
 }
 
 void ServoMod::AileronComplex(int iInput, int *ileft, int *iRight, int iFlapTrim)
 {
-  ileft = &iInput;
-  int right = 180 - iInput;
+  int iScaled = this->servos[roll].getProportional(iInput);
+  ileft = &iScaled;
+  int right = 180 - iScaled;
   iRight = &right;
 }
