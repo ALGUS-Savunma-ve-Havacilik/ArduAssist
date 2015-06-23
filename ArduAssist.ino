@@ -111,10 +111,13 @@ void setup()
   devStatus = mpu.dmpInitialize();
 
   // supply your own gyro offsets here, scaled for min sensitivity
-  mpu.setXGyroOffset(220);
-  mpu.setYGyroOffset(76);
-  mpu.setZGyroOffset(-85);
-  mpu.setZAccelOffset(1788); // 1688 factory default for my test chip
+  mpu.setXGyroOffset(17);
+  mpu.setYGyroOffset(-13);
+  mpu.setZGyroOffset(23);
+  mpu.setXAccelOffset(-791);
+  mpu.setYAccelOffset(-3500);
+  mpu.setZAccelOffset(1494); // 1688 factory default for my test chip
+  
 
   // make sure it worked (returns 0 if so)
   if (devStatus == 0) {
@@ -148,7 +151,7 @@ void setup()
   
   // Specify the number of channels,
   //   followed by the pins the channels are attached to
-  rec = new HobbyRadioReceiver( 6, A0, A1, A2, A3, A4, A5);
+  rec = new HobbyRadioReceiver( 6, A0, A1, A2, A3, A6, A7);
   pinMode(ledPin,OUTPUT);
   for (int i =0; i< iNumServos; i++)
   {
@@ -165,42 +168,45 @@ void setup()
   
   Serial.print( "Num Channels: " );
   Serial.println(rec->getNumChannels());
+  
+    Serial.println( "Starting calibration");
+    while (millis() < 10000) // first ten seconds for calibration.  Get max travel for all six raw channels coming from the transmitter
+    {
+      unsigned long curCalibrationMillis = millis();
+      if (curCalibrationMillis - calibrationMillis > 250)
+      {
+        if (ledOn)
+        {
+          digitalWrite(ledPin,LOW);
+          ledOn = false;
+        }
+        else
+        {
+          digitalWrite(ledPin,HIGH);
+          ledOn = true;
+        }
+      }
+      for (int i = 1; i <= rec->getNumChannels(); i++ )
+      {
+        int j = i-1; //bloody indexing of the servo library - index starts at 1, not 0
+        int curVal = rec->check(i);
+        if (curVal < mod.servos[j].getMaxNeg())
+        {
+          mod.servos[j].setMaxNeg(curVal);
+        }
+        if (curVal > mod.servos[j].getMaxPos())
+        {
+          mod.servos[j].setMaxPos(curVal);
+        }
+      }
+    }
+    Serial.println( "Ending calibration");
+    Serial.println(millis());  
 }
 
 void loop()
 {
-  unsigned long currentMillis = millis();
-  
-  while (millis() < 10000) // first ten seconds for calibration.  Get max travel for all six raw channels coming from the transmitter
-  {
-    unsigned long curCalibrationMillis = millis();
-    if (curCalibrationMillis - calibrationMillis > 250)
-    {
-      if (ledOn)
-      {
-        digitalWrite(ledPin,LOW);
-        ledOn = false;
-      }
-      else
-      {
-        digitalWrite(ledPin,HIGH);
-        ledOn = true;
-      }
-    }
-    for (int i = 1; i <= rec->getNumChannels(); i++ )
-    {
-      int j = i-1; //bloody indexing of the servo library - index starts at 1, not 0
-      int curVal = rec->check(i);
-      if (curVal < mod.servos[j].getMaxNeg())
-      {
-        mod.servos[j].setMaxNeg(curVal);
-      }
-      if (curVal > mod.servos[j].getMaxPos())
-      {
-        mod.servos[j].setMaxPos(curVal);
-      }
-    }
-  }
+  unsigned long currentMillis = millis();  
 
   // here is where you'd put code that needs to be running all the time.
   if(currentMillis - previousMilli2 > 50)
@@ -219,12 +225,11 @@ void loop()
     for (int i = 1; i <= rec->getNumChannels(); i++ )
     {
       val = rec->check(i);
+      Serial.print(i);
+      Serial.print("=");
       Serial.print( val );
-      if (i < rec->getNumChannels())
-      {
-        Serial.print( "\t" );
-      }
-      Serial.println( "\n\n\n\n\n\n\n\n\n\n\n" );
+      Serial.print("\n");
+      Serial.println(millis());
       
 //      if (i == roll)
 //      {
