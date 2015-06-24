@@ -3,8 +3,8 @@
 
 servoMinMax::servoMinMax(void)
 {
-  _iMaxPos = 90;
-  _iMaxNeg = 90;
+  _iMaxPos = 0;
+  _iMaxNeg = 0;
 }
 
 int servoMinMax::getMaxNeg()
@@ -39,11 +39,10 @@ int servoMinMax::getMaxTravel()
 
 int servoMinMax::getProportional(int iInput)
 {
-  int iAbsTravel = _iMaxPos - _iMaxNeg;
-  int iAbsInput = iInput - _iMaxNeg;
-  double dPercent = (double)iAbsInput / (double)iAbsTravel;
-  int iCalculated = (int)((double)_iMaxTravel * dPercent);
-  return iCalculated;
+  int iServoPos = map(iInput, _iMaxNeg, _iMaxPos, 0, _iMaxTravel);
+  Serial.print(" calc prop: ");
+  Serial.print(iServoPos);
+  return iServoPos;
 }
 
 ServoMod::ServoMod(void)
@@ -51,9 +50,9 @@ ServoMod::ServoMod(void)
   _iOld = 90;
 }
 
-int ServoMod::noChange(int iInput) // Take in the value for a channel and pass it out unmodified
+int ServoMod::noChange(int iInput, int iChannel) // Take in the value for a channel and pass it out unmodified
 {
-  return iInput;
+  return this->servos[iChannel].getProportional(iInput);
 }
 
 int ServoMod::ch6Scaled(int iInput, int iChannel, int iCh6) //  Take in a value for a channel and scale it against channel 6.  100% = full data, 0% = no movement.
@@ -85,3 +84,4 @@ void ServoMod::AileronComplex(int iInput, int *ileft, int *iRight, int iFlapTrim
   int right = 180 - iScaled;
   iRight = &right;
 }
+

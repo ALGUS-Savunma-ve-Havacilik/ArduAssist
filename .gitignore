@@ -28,3 +28,7 @@
 *.app
 Debug/
 Visual Micro/
+/Release/ArduAssist.eep
+/Release/ArduAssist.elf
+/Release/ArduAssist.hex
+/Release/*.d

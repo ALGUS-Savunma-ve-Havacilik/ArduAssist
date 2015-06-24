@@ -79,10 +79,31 @@ int val;
 
 
 void setup()
-{
+{  
+  pins = new int[3,5,6,9,10,11];
   
   Serial.begin(9600);
   while (!Serial); // wait for Leonardo enumeration, others continue immediately
+  // Specify the number of channels,
+  //   followed by the pins the channels are attached to
+  rec = new HobbyRadioReceiver( 6, A0, A1, A2, A3, A6, A7);
+  servoArray = new SoftwareServo[rec->getNumChannels()];
+  
+  
+  pinMode(ledPin,OUTPUT);
+  for (int i =0; i< iNumServos; i++)
+  {
+    mod.servos[i].setMaxTravel(180);
+    servoArray[i].attach(pins[i]);
+    if (i == throttleOut)
+    {
+      servoArray[i].write(0);
+    }
+    else
+    {
+      servoArray[i].write(90);
+    }
+  }
   
   // join I2C bus (I2Cdev library doesn't do this automatically)
   #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
@@ -146,67 +167,63 @@ void setup()
     Serial.println(F(")"));
   }
   
-  servoArray = new SoftwareServo[6];
-  pins = new int[3,5,6,9,10,11];
-  
-  // Specify the number of channels,
-  //   followed by the pins the channels are attached to
-  rec = new HobbyRadioReceiver( 6, A0, A1, A2, A3, A6, A7);
-  pinMode(ledPin,OUTPUT);
-  for (int i =0; i< iNumServos; i++)
-  {
-    servoArray[i].attach(pins[i]);
-    if (i == throttleOut)
-    {
-      servoArray[i].write(0);
-    }
-    else
-    {
-      servoArray[i].write(90);
-    }
-  }
-  
   Serial.print( "Num Channels: " );
   Serial.println(rec->getNumChannels());
   
-    Serial.println( "Starting calibration");
-    while (millis() < 10000) // first ten seconds for calibration.  Get max travel for all six raw channels coming from the transmitter
+  Serial.println( "Starting calibration");
+  unsigned long calibrationStart = millis();
+  while (millis() - calibrationStart < 10000) // first ten seconds for calibration.  Get max travel for all six raw channels coming from the transmitter
+  {
+    unsigned long curCalibrationMillis = millis();
+    if (curCalibrationMillis - calibrationMillis > 250)
     {
-      unsigned long curCalibrationMillis = millis();
-      if (curCalibrationMillis - calibrationMillis > 250)
+      if (ledOn)
       {
-        if (ledOn)
-        {
-          digitalWrite(ledPin,LOW);
-          ledOn = false;
-        }
-        else
-        {
-          digitalWrite(ledPin,HIGH);
-          ledOn = true;
-        }
+        digitalWrite(ledPin,LOW);
+        ledOn = false;
       }
-      for (int i = 1; i <= rec->getNumChannels(); i++ )
+      else
       {
-        int j = i-1; //bloody indexing of the servo library - index starts at 1, not 0
-        int curVal = rec->check(i);
-        if (curVal < mod.servos[j].getMaxNeg())
-        {
-          mod.servos[j].setMaxNeg(curVal);
-        }
-        if (curVal > mod.servos[j].getMaxPos())
-        {
-          mod.servos[j].setMaxPos(curVal);
-        }
+        digitalWrite(ledPin,HIGH);
+        ledOn = true;
       }
     }
-    Serial.println( "Ending calibration");
-    Serial.println(millis());  
+    for (int i = 1; i <= rec->getNumChannels(); i++ )
+    {
+      int j = i-1; //bloody indexing of the servo library - index starts at 1, not 0
+      int curVal = rec->check(i);
+      if (curVal < mod.servos[j].getMaxNeg())
+      {
+        mod.servos[j].setMaxNeg(curVal);
+      }
+      if (curVal > mod.servos[j].getMaxPos())
+      {
+        mod.servos[j].setMaxPos(curVal);
+      }
+    }
+  }
+  Serial.println( "Ending calibration");
+  for (int i = 0; i< rec->getNumChannels(); i++)
+  {
+    Serial.print("Max neg ch" );
+    Serial.print(i+1);
+    Serial.print(":");
+    Serial.print(mod.servos[i].getMaxNeg());
+    Serial.println("");
+    Serial.print("Max pos ch" );
+    Serial.print(i+1);
+    Serial.print(":");
+    Serial.print(mod.servos[i].getMaxPos());
+    Serial.println("");
+  }
+  
+  Serial.println(millis());
+  delay(5000);
 }
 
 void loop()
 {
-  unsigned long currentMillis = millis();  
+  unsigned long currentMillis = millis();
 
   // here is where you'd put code that needs to be running all the time.
   if(currentMillis - previousMilli2 > 50)
@@ -228,25 +245,26 @@ void loop()
       Serial.print(i);
       Serial.print("=");
       Serial.print( val );
-      Serial.print("\n");
-      Serial.println(millis());
+      Serial.print("\t");
+
       
-//      if (i == roll)
-//      {
-//        servoArray[leftAileron].write(mod.iLeftAileronSimple(val));
-//        servoArray[rightAileron].write(mod.iRightAileronSimple(val));
-//        
-//        int iLeft;
-//        int iRight;
-//        mod.AileronComplex(val,&iLeft,&iRight,90);
-//        servoArray[leftAileron].write(iLeft);
-//        servoArray[rightAileron].write(iRight);
-//      }
-//      else
-//      {
-        servoArray[i-1].write(mod.noChange(val));
-//      }
+      //      if (i == roll)
+      //      {
+      //        servoArray[leftAileron].write(mod.iLeftAileronSimple(val));
+      //        servoArray[rightAileron].write(mod.iRightAileronSimple(val));
+      //
+      //        int iLeft;
+      //        int iRight;
+      //        mod.AileronComplex(val,&iLeft,&iRight,90);
+      //        servoArray[leftAileron].write(iLeft);
+      //        servoArray[rightAileron].write(iRight);
+      //      }
+      //      else
+      //      {
+      servoArray[i-1].write(mod.noChange(val,i-1));
+      //      }
     }
+    Serial.print("\n");
   }
 
   // Servo(s) refresh only every 20 msec
@@ -259,4 +277,5 @@ void loop()
     }
   }
 }
+
 
