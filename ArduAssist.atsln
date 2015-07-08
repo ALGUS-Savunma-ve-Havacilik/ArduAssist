@@ -3,11 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Atmel Studio Solution File, Format Version 11.00
 Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "ArduAssist", "ArduAssist.cppproj", "{07B459B4-8D76-4638-BC6D-A459BA2D616B}"
 EndProject
-Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "Sketch1", "..\Sketch1\Sketch1.cppproj", "{B09B725C-2331-4D2A-8C6B-74BB537FBEB5}"
-EndProject
-Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "rawServo", "..\rawServo\rawServo.cppproj", "{D3A701AA-9E8D-4862-9CB0-BFBB366B74BD}"
-EndProject
-Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "ServoSweep", "..\ServoSweep\ServoSweep.cppproj", "{DA4B7EA5-5D11-4816-A310-EBAF33827424}"
+Project("{E66E83B9-2572-4076-B26E-6BE79FF3018A}") = "Literal", "Literal\Literal\Literal.cppproj", "{01B15383-EF09-4D7F-974C-2CC779667D05}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,18 +15,10 @@ Global
 		{07B459B4-8D76-4638-BC6D-A459BA2D616B}.Debug|AVR.Build.0 = Debug|AVR
 		{07B459B4-8D76-4638-BC6D-A459BA2D616B}.Release|AVR.ActiveCfg = Release|AVR
 		{07B459B4-8D76-4638-BC6D-A459BA2D616B}.Release|AVR.Build.0 = Release|AVR
-		{B09B725C-2331-4D2A-8C6B-74BB537FBEB5}.Debug|AVR.ActiveCfg = Debug|AVR
-		{B09B725C-2331-4D2A-8C6B-74BB537FBEB5}.Debug|AVR.Build.0 = Debug|AVR
-		{B09B725C-2331-4D2A-8C6B-74BB537FBEB5}.Release|AVR.ActiveCfg = Release|AVR
-		{B09B725C-2331-4D2A-8C6B-74BB537FBEB5}.Release|AVR.Build.0 = Release|AVR
-		{D3A701AA-9E8D-4862-9CB0-BFBB366B74BD}.Debug|AVR.ActiveCfg = Debug|AVR
-		{D3A701AA-9E8D-4862-9CB0-BFBB366B74BD}.Debug|AVR.Build.0 = Debug|AVR
-		{D3A701AA-9E8D-4862-9CB0-BFBB366B74BD}.Release|AVR.ActiveCfg = Release|AVR
-		{D3A701AA-9E8D-4862-9CB0-BFBB366B74BD}.Release|AVR.Build.0 = Release|AVR
-		{DA4B7EA5-5D11-4816-A310-EBAF33827424}.Debug|AVR.ActiveCfg = Debug|AVR
-		{DA4B7EA5-5D11-4816-A310-EBAF33827424}.Debug|AVR.Build.0 = Debug|AVR
-		{DA4B7EA5-5D11-4816-A310-EBAF33827424}.Release|AVR.ActiveCfg = Release|AVR
-		{DA4B7EA5-5D11-4816-A310-EBAF33827424}.Release|AVR.Build.0 = Release|AVR
+		{01B15383-EF09-4D7F-974C-2CC779667D05}.Debug|AVR.ActiveCfg = Debug|AVR
+		{01B15383-EF09-4D7F-974C-2CC779667D05}.Debug|AVR.Build.0 = Debug|AVR
+		{01B15383-EF09-4D7F-974C-2CC779667D05}.Release|AVR.ActiveCfg = Release|AVR
+		{01B15383-EF09-4D7F-974C-2CC779667D05}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
