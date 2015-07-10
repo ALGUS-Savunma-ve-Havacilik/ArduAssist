@@ -11,6 +11,14 @@
 // only working with one channel and one servo right now.  Will eventually scale to six.
 //HobbyRadioReceiver rec( 2, A0, A1);
 //Adafruit_SoftServo servo1, servo2;
+
+#define STEP 8
+
+unsigned long previousMillis    = 0;
+unsigned long previousMilli2    = 0;
+bool bUP                        = true;
+int pos                         = 0;
+
 HobbyRadioReceiver rec( 1, A1);
 Adafruit_SoftServo servo1;
 
@@ -23,8 +31,15 @@ int val2last = 90;        // Last value for servo2 from loop()
 int rx1MinMax[2] = {0,0}; // min and max values coming off radio receiver
 int skipCount = 0;
 
+const int numReadings = 5;
+
+int readings[numReadings];      // the readings from the analog input
+int index = 0;                  // the index of the current reading
+int total = 0;                  // the running total
+int average = 0;                // the average
+
 // =============================================
-// ===               50ms SERVO REFRESH ROUTINE                ===
+// ===               20ms SERVO REFRESH ROUTINE                ===
 // =============================================
 
 //Timer2 Overflow Interrupt, called every 1ms
@@ -32,24 +47,22 @@ ISR(TIMER2_OVF_vect) {
   if (servoInit)
   {
     count++;               //Increments the interrupt counter
-    if(count > 50){
+    if(count > 20){
       toggle = !toggle;    //toggles the LED state
       count = 0;           //Resets the interrupt counter
       digitalWrite(ledPin,toggle);
-      servo1.write(val1Last);
+      
+      if (pos < 0)
+      {
+        pos = 0;
+      }
+      if (pos > 180)
+      {
+        pos = 180;
+      }
+      servo1.write(pos);
       //Serial.print("ch1: ");
-      Serial.println(val1Last);
       servo1.refresh();
-      
-      //Serial.print("\t\tch1Min: ");
-      //Serial.print(rx1MinMax[0]);
-      //Serial.print("\tmax: ");
-      //Serial.println(rx1MinMax[1]);
-      
-      //servo2.write(val2last);
-      //Serial.print("\tch2: ");
-      //Serial.println(val2last);
-      //servo2.refresh();
     }
   }
   TCNT2 = 130;           //Reset Timer to 130 out of 255
@@ -79,42 +92,50 @@ void setup()
   TIMSK2 = 0x01;        //Timer2 INT Reg: Timer2 Overflow Interrupt Enable
   TCCR2A = 0x00;        //Timer2 Control Reg A: Wave Gen Mode normal
   TCCR2B = 0x05;        //Timer2 Control Reg B: Timer Prescaler set to 128
+  
+  //for (int thisReading = 0; thisReading < numReadings; thisReading++)
+  //readings[thisReading] = 0;
 
 }
 
 void loop()
 {
-
-  int val1 = rec.checkServo(1);
-  //Serial.println(val1);
-  if (val1 < rx1MinMax[0] && val1 >=0)
-  {
-    rx1MinMax[0] = val1;
-  }
-  if (val1 > rx1MinMax[1])
-  {
-    rx1MinMax[1] = val1;
-  }
   //Below line commented as we will stick to raw values for now.
-  int val1Translate = constrain(map(val1,17,154,0,179),0,180);
+  //int val1Translate = constrain(map(rec.checkServo(1),17,154,0,180),0,180);
   //int val1Translate = constrain(map(val1,-255,255,0,179),0,180);
   //int val1Translate = val1;
   
-  // do not write to the servo, that will be done in the interrupt loop.
-  if (val1Last < val1Translate - 5 || val1Last > val1Translate + 5)
-  {
-    skipCount++;
-  }    
-  else
-  {
-    val1Last = val1Translate;    
-    skipCount = 0;
-  }
+  //val1Translate = 90;
   
-  if (skipCount > 3)
+  unsigned long currentMillis = millis();
+
+  // here is where you'd put code that needs to be running all the time.
+  if(currentMillis - previousMilli2 > 50)
   {
-    skipCount = 0;
-    val1Last = val1Translate;    
+    previousMilli2 = currentMillis;
+    if (bUP)
+    {
+      if (pos >=180)
+      {
+        bUP = false;
+        pos = 180;
+      }
+      else
+      {
+        pos += STEP;
+      }
+    }
+    else
+    {
+      if (pos <= 0)
+      {
+        bUP = true;
+        pos = 0;
+      }
+      else
+      {
+        pos -= STEP;
+      }
+    }
   }
-  
 }
