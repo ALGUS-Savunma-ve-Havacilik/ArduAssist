@@ -2,8 +2,8 @@
 // Created : 11/05/16 13:48
 // Author : Richard Smith
 
-#include <HobbyRadioReceiver.h> // see https://github.com/ScottCProjects/Arduino/blob/master/Libraries/HobbyRadioReceiver/HobbyRadioReceiver.h
-#include <Adafruit_SoftServo.h>
+#include "HobbyRadioReceiver.h"
+#include "Adafruit_SoftServo.h"
 
 #define STEP 8
 
