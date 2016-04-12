@@ -4,6 +4,7 @@
 
 #include "HobbyRadioReceiver.h"
 #include "Adafruit_SoftServo.h"
+#include "ServoMod.h"
 
 #define STEP 8
 
@@ -30,6 +31,8 @@ int readings[numReadings];      // the readings from the analog input
 int index = 0;                  // the index of the current reading
 int total = 0;                  // the running total
 int average = 0;                // the average
+
+Adafruit_SoftServo throttle;
 
 
 // ===============================================================
@@ -67,6 +70,8 @@ void setup()
 {
   Serial.begin(115200);
   
+  rec = new HobbyRadioReceiver( 1, A0);
+  
   servo1.attach(3);
   servo1.write(0);
   servo1.refresh();
@@ -86,7 +91,7 @@ void setup()
 
 void loop()
 {
-
+	
   /* add main program code here */
 
 }
