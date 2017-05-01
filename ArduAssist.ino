@@ -1,11 +1,11 @@
 //Servo setup is as follows
 // Receiver
-//  Ch1 - Right stick vertical -	pitch
-//  Ch2 - Right stick horizontal -	roll
+//  Ch1 - Right stick vertical -	pitch on A0
+//  Ch2 - Right stick horizontal -	roll on A1
 //  Ch3 - Left stick vertical -	throttle - not routed to Arduino.
-//  Ch4 - Left stick horizontal -	yaw
-//  Ch5 - right knob -			flight variables
-//  Ch6 - left knob -			flaps/spoiler adjust
+//  Ch4 - Left stick horizontal -	yaw on A2
+//  Ch5 - right knob -			flight variables on A6
+//  Ch6 - left knob -			flaps/spoiler adjust on A3
 //  left switch -				Radio Setting - DUAL RATE
 // right switch -				Radio Setting - THROTTLE CUT
 
@@ -21,18 +21,13 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 
-//from http://www.servodatabase.com/servo/towerpro/sg90
-//They seem quite stable but as mentioned by another robotics user they won't do 180 degrees. 
-//Mine went from about 4 degrees (Using setting 581) to 176 degrees (Using 2380). 
-//They will hit most angles in between fairly accurately though.
 
-//I worked out that the centre (90 degrees) was 1480 and calculated 
-//45 and 135 and it went right to them. Pity about upper and lower (0 and 180) not being available though.
-#define SERVOMIN 160 // this is the 'minimum' pulse length in ms
-#define SERVOMAX 580 // this is the 'maximum' pulse length in ms
-#define SERVOMID 370
+#define SERVOMIN 160 // this is the 'minimum' 60hz duration : 0 degrees
+#define SERVOMAX 580 // this is the 'maximum' 60hz duration : 180 degrees
+#define SERVOMID 370 // This is the 'middle' 60hz duration : 90 degrees
 
 #define MINPULSE 1250 // Minimum pulse from receiver
+#define MIDPULSE 1450 // Centered pulse from receiver
 #define MAXPULSE 1650 // maximum pulse from receiver
 
 // called this way, it uses the default address 0x40
@@ -40,11 +35,12 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 //uint8_t * chans;
 uint8_t * readPins;
+uint8_t* aileronPins; // Put aileron servos individually on servo board 4 & 5 9ndex from 0
 
 void setup()
 {
-  //chans = new uint8_t[0,1,3,4,5];
-  readPins = new uint8_t[A0,A1,A2 ];//,A1,A2,A3,A6];
+  aileronPins = new uint8_t[4,5];
+  readPins = new uint8_t[A0,A1,A2,A3,A6];
   for (int i = 0; i<sizeof(readPins) / sizeof(uint8_t); i++)
   {
     pinMode(readPins[i], INPUT);
@@ -53,7 +49,15 @@ void setup()
   pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
   for (uint8_t count = 0; count < sizeof(readPins) / sizeof(uint8_t); count++)
   {
-     pwm.setPWM(count, 0, SERVOMID);
+    if (count == 1)
+    {
+      pwm.setPWM(aileronPins[0], 0, SERVOMID);
+      pwm.setPWM(aileronPins[1], 0, SERVOMID);
+    }
+    else
+    {
+      pwm.setPWM(count, 0, SERVOMID);
+    }
   }  
 }
 
@@ -61,11 +65,20 @@ void loop()
 {
   for (uint8_t count = 0; count < sizeof(readPins) / sizeof(uint8_t); count++)
   {
-	//unsigned long duration = pulseIn(readPins[count], HIGH);
-	//int iDegrees = (int)constrain( map(fRoll,-90,90,0,180),0,180);
-  //pulselength = map(degrees, 0, 180, SERVOMIN, SERVOMAX);
-  //unsigned long mappedDur = map(duration, MINPULSE, MAXPULSE, SERVOMIN, SERVOMAX); 
-    //pwm.setPWM(count, 0, mappedDur);
-    pwm.setPWM(count, 0, SERVOMID);
+	  unsigned long duration = pulseIn(readPins[count], HIGH);
+
+    int angle = map(duration,MINPULSE,MAXPULSE,-90,90);
+    
+    //pulselength = constrain(map(degrees, 0, 180, SERVOMIN, SERVOMAX),SERVOMIN,SERVOMAX); // gets a pulse length for an angle
+    unsigned long mappedDur = constrain(map(duration, MINPULSE, MAXPULSE, SERVOMIN, SERVOMAX),SERVOMIN,SERVOMAX); 
+    if (count == 1)
+    {
+      pwm.setPWM(aileronPins[0], 0, mappedDur);
+      pwm.setPWM(aileronPins[1], 0, mappedDur);
+    }
+    else
+    {
+      pwm.setPWM(count, 0, mappedDur);
+    }
   }
 }
