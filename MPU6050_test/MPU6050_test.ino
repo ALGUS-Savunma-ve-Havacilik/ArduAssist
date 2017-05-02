@@ -13,7 +13,7 @@ MPU6050 mpu;
 // These are my MPU6050 Offset numbers: for mpu.setXGyroOffset()
 // supply your own gyro offsets here, scaled for min sensitivity use MPU6050_calibration.ino <<< download to calibrate your MPU6050 put the values the probram returns below
 //                       XA      YA      ZA      XG      YG      ZG
-int MPUOffsets[6] = {  -4232,  -706,   1729,    173,    -94,     37};
+int MPUOffsets[6] = {  -694,  -3433,   1460,    41,    -11,     24};
 
 
 
