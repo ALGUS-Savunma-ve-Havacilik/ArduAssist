@@ -19,40 +19,38 @@
 //  PWM6 - unknown/unused
 
 #include <Wire.h>
-#include <Adafruit_PWMServoDriver.h>
+#include <Adafruit_PWMServoDriver.h>  bjm q 
 
-
-#define SERVOMIN 160 // this is the 'minimum' 60hz duration : 0 degrees
+#define SERVOMIN 160 // this is the 'minimum' 60hz duration : 0 degrees+ 
 #define SERVOMAX 580 // this is the 'maximum' 60hz duration : 180 degrees
 #define SERVOMID 370 // This is the 'middle' 60hz duration : 90 degrees
 
-#define MINPULSE 1250 // Minimum pulse from receiver
+#define MINPULSE 1140 // Minimum pulse from receiver
 #define MIDPULSE 1450 // Centered pulse from receiver
-#define MAXPULSE 1650 // maximum pulse from receiver
+#define MAXPULSE 1850 // maximum pulse from receiver
 
 // called this way, it uses the default address 0x40
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 //uint8_t * chans;
-uint8_t * readPins;
-uint8_t* aileronPins; // Put aileron servos individually on servo board 4 & 5 9ndex from 0
+uint8_t readPins[] = {A0, A1, A2, A3 } ;
+uint8_t aileronPins[] = {5, 6} ; // Put aileron servos individually on servo board 4 & 5 9ndex from 0
 
 void setup()
 {
-  aileronPins = new uint8_t[4,5];
-  readPins = new uint8_t[A0,A1,A2,A3,A6];
   for (int i = 0; i<sizeof(readPins) / sizeof(uint8_t); i++)
   {
     pinMode(readPins[i], INPUT);
   }
   pwm.begin();
+  Serial.begin(9600);
   pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
   for (uint8_t count = 0; count < sizeof(readPins) / sizeof(uint8_t); count++)
   {
     if (count == 1)
     {
-      pwm.setPWM(aileronPins[0], 0, SERVOMID);
-      pwm.setPWM(aileronPins[1], 0, SERVOMID);
+      pwm.setPWM(5, 0, SERVOMID);
+      pwm.setPWM(6, 0, SERVOMID);
     }
     else
     {
@@ -66,15 +64,17 @@ void loop()
   for (uint8_t count = 0; count < sizeof(readPins) / sizeof(uint8_t); count++)
   {
 	  unsigned long duration = pulseIn(readPins[count], HIGH);
-
+    Serial.print(readPins[count]);
+    Serial.print(",");
+    Serial.println(duration);
     int angle = map(duration,MINPULSE,MAXPULSE,-90,90);
     
     //pulselength = constrain(map(degrees, 0, 180, SERVOMIN, SERVOMAX),SERVOMIN,SERVOMAX); // gets a pulse length for an angle
     unsigned long mappedDur = constrain(map(duration, MINPULSE, MAXPULSE, SERVOMIN, SERVOMAX),SERVOMIN,SERVOMAX); 
     if (count == 1)
     {
-      pwm.setPWM(aileronPins[0], 0, mappedDur);
-      pwm.setPWM(aileronPins[1], 0, mappedDur);
+      pwm.setPWM(5, 0, mappedDur);
+      pwm.setPWM(6, 0, mappedDur);
     }
     else
     {
