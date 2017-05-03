@@ -1,10 +1,25 @@
 #include <PID_v1.h>
 #include "I2Cdev.h"
 #include "MPU6050_6Axis_MotionApps20.h"
-
+#include <U8g2lib.h>
 
 MPU6050 mpu;
 int MPUOffsets[6] = {  -694,  -3433,   1460,    41,    -11,     24};
+
+
+// If using software SPI (the default case):
+#define OLED_CLK   12   //D0 SCL,CLK,SCK Clock
+#define OLED_MOSI  11   //D1 SDA MOSI Data
+#define OLED_RESET 10   //RES RST RESET Reset
+#define OLED_DC    9    //A0 Data/Command
+#define OLED_CS    8    //CS Chip Select
+
+// Please UNCOMMENT one of the contructor lines below
+// U8g2 Contructor List (Frame Buffer)
+// The complete list is available here: https://github.com/olikraus/u8g2/wiki/u8g2setupcpp
+// Please update the pin numbers according to your setup. Use U8X8_PIN_NONE if the reset pin is not connected
+U8G2_SSD1306_128X64_NONAME_2_4W_SW_SPI u8g2(U8G2_R0, /* clock=*/ OLED_CLK, /* data=*/ OLED_MOSI, /* cs=*/ OLED_CS, /* dc=*/ OLED_DC, /* reset=*/ OLED_RESET);
+
 #define LED_PIN 13 //
 
 // ================================================================
@@ -26,6 +41,7 @@ uint8_t devStatus;      // return status after each device operation (0 = succes
 uint16_t packetSize;    // expected DMP packet size (default is 42 bytes)
 uint16_t fifoCount;     // count of all bytes currently in FIFO
 uint8_t fifoBuffer[64]; // FIFO storage buffer
+long QTimer = millis();
 
 // orientation/motion vars
 Quaternion q;           // [w, x, y, z]         quaternion container
@@ -37,32 +53,29 @@ float euler[3];         // [psi, theta, phi]    Euler angle container
 float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
 float Yaw, Pitch, Roll; // in degrees
 
+void draw()
+{
+  u8g2.firstPage();
+  do {
+    //u8g2.setFont(u8g2_font_ncenB14_tf ); //14 pixel high
+    //u8g2_font_profont22_mf 14 pixel monospace
+    // u8g2_font_helvB12_tf 12 pixel Helvetica
+    // u8g2_font_crox3c_mf 12 pixel monospace
+    u8g2.setFont(u8g2_font_helvB12_tf );
+    u8g2.drawStr(0,12,"Hello World!");
+  } while ( u8g2.nextPage() );
+}
 
 void setup() {
   Serial.begin(115200); //115200
   while (!Serial);
 
   i2cSetup();
+  u8g2.begin();
 
   Serial.println(F("Alive"));
   MPU6050Connect();
   pinMode(LED_PIN, OUTPUT); // LED Blinks when you are recieving FIFO packets from your MPU6050
-}
-
-void loop() {
-  if (mpuInterrupt ) { // wait for MPU interrupt or extra packet(s) available
-    GetDMP(); // Gets the MPU Data and canculates angles
-    // Do Screen update stuff
-  }
-
-  static long QTimer = millis();
-  if ((long)( millis() - QTimer ) >= 20) {
-    QTimer = millis();
-    Serial.print(F("\t Yaw")); Serial.print(Yaw);
-    Serial.print(F("\t Pitch ")); Serial.print(Pitch);
-    Serial.print(F("\t Roll ")); Serial.print(Roll);
-    Serial.println();
-  }
 }
 
 // ================================================================
@@ -207,4 +220,24 @@ void MPUMath() {
   Yaw = (ypr[0] * 180 / M_PI);
   Pitch = (ypr[1] * 180 / M_PI);
   Roll = (ypr[2] * 180 / M_PI);
+}
+
+// ================================================================
+// ===                       Main Program                       ===
+// ================================================================
+
+void loop() {
+  if (mpuInterrupt ) { // wait for MPU interrupt or extra packet(s) available
+    GetDMP(); // Gets the MPU Data and canculates angles
+    // Do Screen update stuff
+    draw();
+    }
+  
+  if ((long)( millis() - QTimer ) >= 20) {
+    QTimer = millis();
+    Serial.print(F("\t Yaw")); Serial.print(Yaw);
+    Serial.print(F("\t Pitch ")); Serial.print(Pitch);
+    Serial.print(F("\t Roll ")); Serial.print(Roll);
+    Serial.println();
+  }
 }

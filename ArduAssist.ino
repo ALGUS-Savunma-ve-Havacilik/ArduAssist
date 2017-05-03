@@ -34,13 +34,11 @@
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 
 //uint8_t * chans;
-uint8_t * readPins;
-uint8_t* aileronPins; // Put aileron servos individually on servo board 4 & 5 9ndex from 0
+uint8_t readPins[] = {A0, A1, A2, A3, A6};
+uint8_t aileronPins[] = {4,5}; // Put aileron servos individually on servo board 4 & 5 index from 0
 
 void setup()
 {
-  aileronPins = new uint8_t[4,5];
-  readPins = new uint8_t[A0,A1,A2,A3,A6];
   for (int i = 0; i<sizeof(readPins) / sizeof(uint8_t); i++)
   {
     pinMode(readPins[i], INPUT);
