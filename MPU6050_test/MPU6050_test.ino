@@ -64,7 +64,7 @@ void MPU6050Connect() {
     // 2 = DMP configuration updates failed
     // (if it's going to break, usually the code will be 1)
 
-    char * StatStr[5] { "No Error", "initial memory load failed", "DMP configuration updates failed", "3", "4"};
+    char * StatStr[] { "No Error", "initial memory load failed", "DMP configuration updates failed", "3", "4"};
 
     MPUInitCntr++;
 
