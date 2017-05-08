@@ -23,15 +23,26 @@
 
 
 #define SERVOMIN 160 // this is the 'minimum' 60hz duration : 0 degrees
-#define SERVOMAX 580 // this is the 'maximum' 60hz duration : 180 degrees
 #define SERVOMID 370 // This is the 'middle' 60hz duration : 90 degrees
+#define SERVOMAX 580 // this is the 'maximum' 60hz duration : 180 degrees
+
 
 #define MINPULSE 1250 // Minimum pulse from receiver
-#define MIDPULSE 1450 // Centered pulse from receiver
-#define MAXPULSE 1650 // maximum pulse from receiver
+#define MIDPULSE 1500 // Centered pulse from receiver
+#define MAXPULSE 1750 // maximum pulse from receiver
 
 // called this way, it uses the default address 0x40
 Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+
+class servo
+{
+  public:
+  int start;
+  int mid;
+  int end;
+};
+
+servo servos[15];
 
 //uint8_t * chans;
 uint8_t readPins[] = {A0, A1, A2, A3, A6};
@@ -39,12 +50,30 @@ uint8_t aileronPins[] = {4,5}; // Put aileron servos individually on servo board
 
 void setup()
 {
+
+  for (int i = 0; i < 15; i++)
+  {
+    servos[i].start = SERVOMIN;
+    servos[i].mid = SERVOMID;
+    servos[i].end = SERVOMAX;
+  }
+
+  servos[aileronPins[0] ].start = 265;
+  servos[aileronPins[0] ].mid = 370;
+  servos[aileronPins[0] ].end = 475;
+
+  servos[aileronPins[1] ].start = 265;
+  servos[aileronPins[1] ].mid = 370;
+  servos[aileronPins[1] ].end = 475;
+  
   for (int i = 0; i<sizeof(readPins) / sizeof(uint8_t); i++)
   {
     pinMode(readPins[i], INPUT);
   }
+  
   pwm.begin();
   pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
+  
   for (uint8_t count = 0; count < sizeof(readPins) / sizeof(uint8_t); count++)
   {
     if (count == 1)

@@ -30,6 +30,9 @@ void dmpDataReady() {
   mpuInterrupt = true;
 }
 
+//https://www.i2cdevlib.com/forums/topic/24-roll-and-pitch-angles-ranges/?do=findComment&comment=843
+
+
 // ================================================================
 // ===                      MPU DMP SETUP                       ===
 // ================================================================
