@@ -66,6 +66,12 @@ void draw()
     // u8g2_font_crox3c_mf 12 pixel monospace
     u8g2.setFont(u8g2_font_helvB12_tf );
     u8g2.drawStr(0,12,"Hello World!");
+    char text[13];
+    sprintf(text, "Pitch: %i", (int)Pitch);
+    u8g2.drawStr(0,30,text);
+    sprintf(text, "Roll: %i", (int)Roll);
+    u8g2.drawStr(0,45,text);
+    //u8g2.drawStr(0,12,"Hello World!");
   } while ( u8g2.nextPage() );
 }
 
@@ -236,7 +242,7 @@ void loop() {
     draw();
     }
   
-  if ((long)( millis() - QTimer ) >= 20) {
+  if ((long)( millis() - QTimer ) >= 100) {
     QTimer = millis();
     Serial.print(F("\t Yaw")); Serial.print(Yaw);
     Serial.print(F("\t Pitch ")); Serial.print(Pitch);
