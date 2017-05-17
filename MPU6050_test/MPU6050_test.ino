@@ -8,6 +8,14 @@
 // Correcting the PID code fixed my issues with the fifo buffer being too fast
 #include "Wire.h"
 
+#define LED_PIN 13 // 
+#define HMC5883L_DEFAULT_ADDRESS    0x1E
+#define HMC5883L_RA_DATAX_H         0x03
+#define HMC5883L_RA_DATAZ_H         0x05
+#define HMC5883L_RA_DATAY_H         0x07
+
+int interrupt_pin=2; // Check where your INT pin is connected. Check below.
+
 MPU6050 mpu;
 
 // These are my MPU6050 Offset numbers: for mpu.setXGyroOffset()
@@ -15,9 +23,10 @@ MPU6050 mpu;
 //                       XA      YA      ZA      XG      YG      ZG
 int MPUOffsets[6] = {  -694,  -3433,   1460,    41,    -11,     24};
 
-
-
-#define LED_PIN 13 // 
+int16_t ax, ay, az;
+int16_t gx, gy, gz;
+int16_t mx, my, mz;
+float heading;          // Simple magnetic heading. (NOT COMPENSATED FOR PITCH AND ROLL)
 
 // ================================================================
 // ===               INTERRUPT DETECTION ROUTINE                ===
@@ -47,7 +56,7 @@ VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measure
 VectorFloat gravity;    // [x, y, z]            gravity vector
 float euler[3];         // [psi, theta, phi]    Euler angle container
 float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
-float Yaw, Pitch, Roll; // in degrees
+float Yaw, Pitch, Roll, Heading; // in degrees
 
 
 
@@ -87,6 +96,54 @@ void MPU6050Connect() {
   mpu.setYGyroOffset(MPUOffsets[4]);
   mpu.setZGyroOffset(MPUOffsets[5]);
 
+  // Magnetometer configuration
+
+  mpu.setI2CMasterModeEnabled(0);
+  mpu.setI2CBypassEnabled(1);
+
+  Wire.beginTransmission(HMC5883L_DEFAULT_ADDRESS);
+  Wire.write(0x02); 
+  Wire.write(0x00);  // Set continuous mode
+  Wire.endTransmission();
+  delay(5);
+
+  Wire.beginTransmission(HMC5883L_DEFAULT_ADDRESS);
+  Wire.write(0x00);
+  Wire.write(B00011000);  // 75Hz
+  Wire.endTransmission();
+  delay(5);
+
+  mpu.setI2CBypassEnabled(0);
+
+  // X axis word
+  mpu.setSlaveAddress(0, HMC5883L_DEFAULT_ADDRESS | 0x80); // 0x80 turns 7th bit ON, according to datasheet, 7th bit controls Read/Write direction
+  mpu.setSlaveRegister(0, HMC5883L_RA_DATAX_H);
+  mpu.setSlaveEnabled(0, true);
+  mpu.setSlaveWordByteSwap(0, false);
+  mpu.setSlaveWriteMode(0, false);
+  mpu.setSlaveWordGroupOffset(0, false);
+  mpu.setSlaveDataLength(0, 2);
+
+  // Y axis word
+  mpu.setSlaveAddress(1, HMC5883L_DEFAULT_ADDRESS | 0x80);
+  mpu.setSlaveRegister(1, HMC5883L_RA_DATAY_H);
+  mpu.setSlaveEnabled(1, true);
+  mpu.setSlaveWordByteSwap(1, false);
+  mpu.setSlaveWriteMode(1, false);
+  mpu.setSlaveWordGroupOffset(1, false);
+  mpu.setSlaveDataLength(1, 2);
+
+  // Z axis word
+  mpu.setSlaveAddress(2, HMC5883L_DEFAULT_ADDRESS | 0x80);
+  mpu.setSlaveRegister(2, HMC5883L_RA_DATAZ_H);
+  mpu.setSlaveEnabled(2, true);
+  mpu.setSlaveWordByteSwap(2, false);
+  mpu.setSlaveWriteMode(2, false);
+  mpu.setSlaveWordGroupOffset(2, false);
+  mpu.setSlaveDataLength(2, 2);
+
+  mpu.setI2CMasterModeEnabled(1);
+
   Serial.println(F("Enabling DMP..."));
   mpu.setDMPEnabled(true);
   // enable Arduino interrupt detection
@@ -102,6 +159,8 @@ void MPU6050Connect() {
   mpu.getIntStatus();
   mpuInterrupt = false; // wait for next interrupt
 
+  mpu.setDLPFMode(6);
+
 }
 // ================================================================
 // ===                      i2c SETUP Items                     ===
@@ -116,8 +175,6 @@ void i2cSetup() {
 #endif
 }
 
-
-
 void setup() {
   Serial.begin(115200); //115200
   while (!Serial);
@@ -127,7 +184,6 @@ void setup() {
   Serial.println(F("Alive"));
   MPU6050Connect();
   pinMode(LED_PIN, OUTPUT); // LED Blinks when you are recieving FIFO packets from your MPU6050
-
 }
 
 void loop() {
@@ -144,11 +200,10 @@ void loop() {
     Serial.print(F("\t Yaw")); Serial.print(Yaw);
     Serial.print(F("\t Pitch ")); Serial.print(Pitch);
     Serial.print(F("\t Roll ")); Serial.print(Roll);
+    Serial.print(F("\t Head ")); Serial.print(Heading);
     Serial.println();
   }
 }
-
-
 
 void GetDMP() { // Best version I have made so far
   // Serial.println(F("FIFO interrupt at:"));
@@ -222,5 +277,15 @@ void MPUMath() {
   Yaw = (ypr[0] * 180 / M_PI);
   Pitch = (ypr[1] * 180 / M_PI);
   Roll = (ypr[2] * 180 / M_PI);
+
+  mpu.getMotion6(&ax, &ay, &az, &gx, &gy, &gz);
+  
+  //Read magnetometer measures
+  mx=mpu.getExternalSensorWord(0);
+  my=mpu.getExternalSensorWord(2);
+  mz=mpu.getExternalSensorWord(4);
+
+  heading = atan2(my, mx);
+  if(heading < 0) heading += 2 * M_PI;
 }
 
