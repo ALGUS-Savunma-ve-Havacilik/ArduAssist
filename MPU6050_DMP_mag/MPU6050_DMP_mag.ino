@@ -21,38 +21,6 @@ int16_t gx, gy, gz;
 int16_t mx, my, mz;
 float heading;          // Simple magnetic heading. (NOT COMPENSATED FOR PITCH AND ROLL)
 
-// ================================================================
-// ===                      MPU DMP SETUP                       ===
-// ================================================================
-int FifoAlive = 0; // tests if the interrupt is triggering
-int IsAlive = -20;     // counts interrupt start at -20 to get 20+ good values before assuming connected
-// MPU control/status vars
-uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
-uint8_t devStatus;      // return status after each device operation (0 = success, !0 = error)
-uint16_t packetSize;    // expected DMP packet size (default is 42 bytes)
-uint16_t fifoCount;     // count of all bytes currently in FIFO
-uint8_t fifoBuffer[64]; // FIFO storage buffer
-
-// orientation/motion vars
-Quaternion q;           // [w, x, y, z]         quaternion container
-VectorInt16 aa;         // [x, y, z]            accel sensor measurements
-VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measurements
-VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measurements
-VectorFloat gravity;    // [x, y, z]            gravity vector
-float euler[3];         // [psi, theta, phi]    Euler angle container
-float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
-float Yaw, Pitch, Roll; // in degrees
-
-int MPUOffsets[6] = {  -694,  -3433,   1460,    41,    -11,     24};
-
-// ================================================================
-// ===               INTERRUPT DETECTION ROUTINE                ===
-// ================================================================
-volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
-void dmpDataReady() {
-  mpuInterrupt = true;
-}
-
 void setup() {
 
   // join I2C bus (I2Cdev library doesn't do this automatically)
@@ -82,19 +50,20 @@ void setup() {
 
   // load and configure the DMP
   Serial.println(F("Initializing DMP..."));
-  devStatus = mpu.dmpInitialize();
+  // devStatus = mpu.dmpInitialize();
 
   // supply your own gyro offsets here, scaled for min sensitivity
   // If you don't know yours, you can find an automated sketch for this task from: http://www.i2cdevlib.com/forums/topic/96-arduino-sketch-to-automatically-calculate-mpu6050-offsets/
 
 
   // TODO: Compute these parameters
-   mpu.setXAccelOffset(MPUOffsets[0]);
-  mpu.setYAccelOffset(MPUOffsets[1]);
-  mpu.setZAccelOffset(MPUOffsets[2]);
-  mpu.setXGyroOffset(MPUOffsets[3]);
-  mpu.setYGyroOffset(MPUOffsets[4]);
-  mpu.setZGyroOffset(MPUOffsets[5]);
+  mpu.setXAccelOffset(-3591);
+  mpu.setYAccelOffset(-842);
+  mpu.setZAccelOffset(578);
+
+  mpu.setXGyroOffset(-51);
+  mpu.setYGyroOffset(-57);
+  mpu.setZGyroOffset(0);
 
   // Magnetometer configuration
 
@@ -144,20 +113,34 @@ void setup() {
 
   mpu.setI2CMasterModeEnabled(1);
 
-  Serial.println(F("Enabling DMP..."));
-  mpu.setDMPEnabled(true);
-  // enable Arduino interrupt detection
+  // make sure it worked (returns 0 if so)
+  // if (devStatus == 0) {
+  //   // turn on the DMP, now that it's ready
+  //   Serial.println(F("Enabling DMP..."));
+  //   mpu.setDMPEnabled(true);
 
-  Serial.println(F("Enabling interrupt detection (Arduino external interrupt pin 2 on the Uno)..."));
-  attachInterrupt(0, dmpDataReady, FALLING); //pin 2 on the Uno
+  //   // enable Arduino interrupt detection
+  //   Serial.println(F("Enabling interrupt detection (Arduino external interrupt 0)..."));
+  //   attachInterrupt(interrupt_pin, dmpDataReady, RISING);
+  //   mpuIntStatus = mpu.getIntStatus();
 
-  mpuIntStatus = mpu.getIntStatus(); // Same
-  // get expected DMP packet size for later comparison
-  packetSize = mpu.dmpGetFIFOPacketSize();
-  delay(1000); // Let it Stabalize
-  mpu.resetFIFO(); // Clear fifo buffer
-  mpu.getIntStatus();
-  mpuInterrupt = false; // wait for next interrupt
+  //   // set our DMP Ready flag so the main loop() function knows it's okay to use it
+  //   Serial.println(F("DMP ready! Waiting for first interrupt..."));
+  //   dmpReady = true;
+
+  //   // get expected DMP packet size for later comparison
+  //   packetSize = mpu.dmpGetFIFOPacketSize();
+  // } 
+  // else {
+  //   // ERROR!
+
+  //   // 1 = initial memory load failed
+  //   // 2 = DMP configuration updates failed
+  //   // (if it's going to break, usually the code will be 1)
+  //   Serial.print(F("DMP Initialization failed (code "));
+  //   Serial.print(devStatus);
+  //   Serial.println(F(")"));
+  // }
 
   // configure LED for output
   mpu.setDLPFMode(6);
